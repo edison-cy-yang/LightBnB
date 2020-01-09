@@ -60,7 +60,6 @@ const getUserWithId = function(id) {
       return Promise.resolve(null);
     } else {
       user = res.rows[0];
-      console.log(user);
       return Promise.resolve(user);
     }
   });
@@ -132,7 +131,7 @@ const getAllProperties = function(options, limit = 10) {
 
   if (options.owner_id) {
     queryParams.push(options.owner_id);
-    if (options.city) {
+    if (queryParams.length > 0) {
       queryString += ` AND properties.owner_id = $${queryParams.length}`;
     } else {
       queryString += `WHERE properties.owner_id = $${queryParams.length}`;
@@ -141,7 +140,7 @@ const getAllProperties = function(options, limit = 10) {
 
   if (options.minimum_price_per_night) {
     queryParams.push(options.minimum_price_per_night);
-    if (options.city || options.owner_id) {
+    if (queryParams.length > 0) {
       queryString += ` AND properties.cost_per_night >= $${queryParams.length}`;
     } else {
       queryString += `WHERE properties.cost_per_night >= $${queryParams.length}`;
@@ -150,7 +149,7 @@ const getAllProperties = function(options, limit = 10) {
 
   if (options.maximum_price_per_night) {
     queryParams.push(options.maximum_price_per_night);
-    if (options.city || options.owner_id || options.minimum_price_per_night) {
+    if (queryParams.length > 0) {
       queryString += ` AND properties.cost_per_night <= $${queryParams.length}`;
     } else {
       queryString += `WHERE properties.cost_per_night <= $${queryParams.length}`;
@@ -170,7 +169,7 @@ const getAllProperties = function(options, limit = 10) {
   ORDER BY properties.cost_per_night
   LIMIT $${queryParams.length};
   `;
-  
+
   return pool.query(queryString, queryParams)
   .then(res => res.rows);
 }
