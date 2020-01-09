@@ -1,23 +1,7 @@
 const properties = require('./json/properties.json');
 const users = require('./json/users.json');
 
-const { Pool } = require('pg');
-const pool = new Pool({
-  user: 'vagrant',
-  password: '123',
-  host: 'localhost',
-  database: 'lightbnb'
-});
-
-pool.connect(() => {
-  console.log("connected");
-});
-
-// pool.query(`SELECT *
-//   FROM users
-//   WHERE email = $1`, ['edison.cy.yang@gmail.com']).then(user => {
-//     console.log(user);
-//   })
+const pool = require('./db');
 
 /// Users
 
